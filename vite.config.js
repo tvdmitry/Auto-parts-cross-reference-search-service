@@ -9,6 +9,7 @@ export default defineConfig(({ mode }) => {
   };
 
   return {
+    base: mode === 'pages' ? '/search-service/' : '/',
     plugins: [react(), {
       name: 'favorit-api',
       configureServer: installProxy,

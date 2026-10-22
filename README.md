@@ -2,7 +2,7 @@
 
 Клиентское приложение на **React + Redux Toolkit**, JavaScript без TypeScript. Стили — Bootstrap и небольшой CSS-файл. Реализованы только поиск производителей по артикулу и получение предложений с аналогами после выбора производителя.
 
-**Сайт:** [tvdmitry.github.io](https://tvdmitry.github.io/). **Исходный код:** [Auto-parts-cross-reference-search-service](https://github.com/tvdmitry/Auto-parts-cross-reference-search-service).
+**Сайт:** [tvdmitry.github.io/search-service/](https://tvdmitry.github.io/search-service/). **Исходный код:** [Auto-parts-cross-reference-search-service](https://github.com/tvdmitry/Auto-parts-cross-reference-search-service).
 
 ## Версия на GitHub Pages
 
@@ -12,10 +12,10 @@ GitHub Pages обслуживает статические файлы, поэт�
 
 ```powershell
 npm run build:pages
-npm run preview
+npm run preview -- --mode pages
 ```
 
-Основной код хранится в этом репозитории. Репозиторий [tvdmitry.github.io](https://github.com/tvdmitry/tvdmitry.github.io) содержит workflow публикации: он забирает код из `main`, выполняет тесты, собирает Pages-версию и размещает её по корневому адресу. Для обновления сайта после изменения кода запустите **Actions → Deploy application to GitHub Pages → Run workflow** в репозитории `tvdmitry.github.io`.
+Основной код хранится в этом репозитории. Репозиторий [tvdmitry.github.io](https://github.com/tvdmitry/tvdmitry.github.io) содержит workflow публикации: он забирает код из `main`, выполняет тесты, собирает Pages-версию и размещает её в `/search-service/`. На корневом адресе приложение не размещается. Для обновления сайта после изменения кода запустите **Actions → Deploy application to GitHub Pages → Run workflow** в репозитории `tvdmitry.github.io`.
 
 ## Запуск
 
