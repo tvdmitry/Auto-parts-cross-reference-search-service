@@ -101,7 +101,6 @@ export default function App() {
         </div>
         {offersStatus === 'succeeded' && offers.length > 0 && <div className="table-footnote">Каждая строка — отдельное предложение склада. Позиции с нулевым остатком также показаны.</div>}
       </section>
-      <footer className="page-footer"><span>Данные предоставлены сервисом Favorit Parts</span><span>Поиск запчастей и аналогов</span></footer>
     </main>
   </>;
 }
