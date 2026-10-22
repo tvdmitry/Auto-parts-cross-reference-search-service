@@ -41,7 +41,6 @@ export function readGoods(payload) {
   if (!Array.isArray(payload?.goods)) {
     throw new Error('Сервис вернул ответ в неизвестном формате. Повторите поиск позже.');
   }
-  // «Не найдено» в API может быть goods: [{}] или записью с пустыми полями.
   return payload.goods.filter((item) => item && (text(item.brand) || text(item.number) || text(item.name)));
 }
 
@@ -70,7 +69,6 @@ export function getOffers(goods) {
         number: text(item.number) || '—',
         isAnalogue,
         warehouse: warehouse ? text(warehouse.code) || text(warehouse.id) || 'Не указан' : 'Нет предложений',
-        // goods.price устарело. Цена и остаток одной строки принадлежат одному складу.
         price: warehouse ? numeric(warehouse.price) : null,
         stock: warehouse ? numeric(warehouse.stock) : numeric(item.count),
       });

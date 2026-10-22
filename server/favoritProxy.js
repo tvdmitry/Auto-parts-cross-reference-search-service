@@ -12,7 +12,6 @@ function sendJson(res, status, data) {
   res.end(JSON.stringify(data));
 }
 
-// Один и тот же прокси используется Vite и сервером готовой сборки.
 export function createFavoritProxy({ apiKey = DOCUMENTATION_API_KEY, fetchImpl = fetch, timeout = 20000 } = {}) {
   return async (req, res, next) => {
     const requestUrl = new URL(req.url, 'http://localhost');
@@ -50,7 +49,6 @@ export function createFavoritProxy({ apiKey = DOCUMENTATION_API_KEY, fetchImpl =
       });
       const raw = await response.text();
       if (!raw.trim() && response.ok) return sendJson(res, 200, { goods: [] });
-      // Не возвращаем браузеру возможное отражение ключа во внешнем ответе.
       const data = JSON.parse(raw.split(apiKey.trim()).join('[hidden]'));
       sendJson(res, response.status, data);
     } catch (error) {
