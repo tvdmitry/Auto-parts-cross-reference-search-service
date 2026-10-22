@@ -1,25 +1,27 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createPartsUrl, fetchParts, getBrands, getOffers, readGoods, setApiKey } from '../src/api/parts.js';
+import { createPartsUrl, fetchParts, getBrands, getOffers, readGoods } from '../src/api/parts.js';
 import reducer, { brandSelected, loadBrands, loadOffers, numberChanged } from '../src/store/searchSlice.js';
 
 test('Pages обращается только к HTTPS API Favorit и кодирует ключ и параметры', () => {
-  const url = new URL(createPartsUrl({ number: '#1&+', brand: 'A&B' }, { direct: true, key: 'test&key+' }));
+  const url = new URL(createPartsUrl({ number: '#1&+', brand: 'A&B' }, { direct: true }));
   assert.equal(url.origin, 'https://api.favorit-parts.ru');
   assert.equal(url.pathname, '/hs/hsprice/');
-  assert.equal(url.searchParams.get('key'), 'test&key+');
+  assert.equal(url.searchParams.get('key'), '00000000-0000-0000-0000-000000000001');
   assert.equal(url.searchParams.get('number'), '#1&+');
   assert.equal(url.searchParams.get('brand'), 'A&B');
   assert.equal(url.searchParams.get('analogues'), 'on');
-  assert.throws(() => createPartsUrl({ number: '123' }, { direct: true, key: ' ' }), /Укажите ключ/);
 });
 
-test('ключ Pages можно удалить из памяти, локальный прокси его не получает от браузера', () => {
-  setApiKey('temporary-test-key');
-  assert.equal(new URL(createPartsUrl({ number: '123' }, { direct: true })).searchParams.get('key'), 'temporary-test-key');
+test('оба этапа Pages автоматически используют ключ из PDF без ввода пользователем', () => {
+  for (const params of [{ number: '01089' }, { number: '01089', brand: 'ASAM' }]) {
+    const url = new URL(createPartsUrl(params, { direct: true }));
+    assert.equal(url.searchParams.get('key'), '00000000-0000-0000-0000-000000000001');
+    assert.equal(url.searchParams.get('number'), '01089');
+    assert.equal(url.searchParams.has('brand'), Boolean(params.brand));
+    assert.equal(url.searchParams.get('analogues'), params.brand ? 'on' : null);
+  }
   assert.equal(createPartsUrl({ number: '123' }, { direct: false }), '/api/price?number=123');
-  setApiKey('');
-  assert.throws(() => createPartsUrl({ number: '123' }, { direct: true }), /Укажите ключ/);
 });
 
 test('пустая структура из документации означает отсутствие результатов', () => {

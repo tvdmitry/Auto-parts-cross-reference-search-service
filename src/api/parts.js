@@ -1,3 +1,5 @@
+import { DOCUMENTATION_API_KEY } from './config.js';
+
 const ERROR_MESSAGES = {
   'Empty key!': 'Не указан ключ покупателя. Проверьте настройку подключения.',
   'Invalid key client!': 'Ключ покупателя недействителен. Проверьте настройку подключения.',
@@ -6,23 +8,16 @@ const ERROR_MESSAGES = {
   'Request quota exceeded!': 'Превышен лимит запросов Favorit Parts. Повторите поиск позже.',
 };
 
-export const usesDirectApi = import.meta.env?.MODE === 'pages';
-let apiKey = '';
+const usesDirectApi = import.meta.env?.MODE === 'pages';
 
-// Ключ статической версии живёт только в памяти текущей вкладки.
-export function setApiKey(value) {
-  apiKey = value.trim();
-}
-
-export function createPartsUrl({ number, brand }, { direct = usesDirectApi, key = apiKey } = {}) {
+export function createPartsUrl({ number, brand }, { direct = usesDirectApi } = {}) {
   const params = new URLSearchParams({ number: number.trim() });
   if (brand) {
     params.set('brand', brand);
     params.set('analogues', 'on');
   }
   if (!direct) return `/api/price?${params}`;
-  if (!key.trim()) throw new Error('Укажите ключ покупателя Favorit Parts для начала поиска.');
-  params.set('key', key.trim());
+  params.set('key', DOCUMENTATION_API_KEY);
   return `https://api.favorit-parts.ru/hs/hsprice/?${params}`;
 }
 

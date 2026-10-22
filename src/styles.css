@@ -94,16 +94,7 @@ h2 { font-size: 19px; font-weight: 650; margin: 0; letter-spacing: -.4px; }
 .price-cell { font-size: 13px; font-weight: 650; }
 .table-footnote { font-size: 10px; line-height: 1.6; color: #73868f; background: #fbfcfc; padding: 13px 30px; border-top: 1px solid #edf1f3; }
 .page-footer { padding: 23px 0 32px; display: flex; justify-content: space-between; gap: 15px; font-size: 10px; color: #7a8a93; }
-.connection-card { padding: 24px 30px; margin-bottom: 25px; }
-.connection-card > p { color: var(--muted); font-size: 13px; margin: 10px 0 17px; }
-.connection-inputs { display: flex; gap: 10px; max-width: 650px; }
-.connection-inputs .form-control { min-width: 0; height: 43px; font-size: 14px; }
-.connection-inputs .btn { font-size: 13px; background: var(--accent); }
-.connection-status { display: flex; align-items: center; justify-content: space-between; gap: 15px; padding: 10px 15px; margin-bottom: 22px; border-radius: 9px; background: #eaf5ef; color: #216c54; font-size: 12px; }
-.connection-status > span { display: flex; align-items: center; gap: 7px; }
-.connection-status .btn { color: #216c54; font-size: 12px; }
 @media (max-width: 767px) {
-  .connection-card { padding: 22px 20px; }
   .app-container { padding-right: 20px; padding-left: 20px; }
   .header-inner { height: 77px; }
   .header-caption { display: none; }
@@ -122,7 +113,6 @@ h2 { font-size: 19px; font-weight: 650; margin: 0; letter-spacing: -.4px; }
   .page-footer { flex-direction: column; gap: 7px; }
 }
 @media (max-width: 420px) {
-  .connection-inputs { flex-direction: column; }
   .app-container { padding-right: 14px; padding-left: 14px; }
   .search-card { padding: 21px 17px; }
   h1 { font-size: 29px; }

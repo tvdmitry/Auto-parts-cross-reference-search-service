@@ -12,10 +12,23 @@ async function request(options, url, method = 'GET') {
   return res;
 }
 
-test('без ключа прокси показывает настройку и не обращается к API', async () => {
-  const response = await request({ fetchImpl: () => { throw new Error('Must not call'); } }, '/api/price?number=123');
+test('при явно пустом ключе прокси показывает настройку и не обращается к API', async () => {
+  const response = await request({ apiKey: '', fetchImpl: () => { throw new Error('Must not call'); } }, '/api/price?number=123');
   assert.equal(response.status, 503);
   assert.match(response.body.error, /FAVORIT_API_KEY/);
+});
+
+test('без отдельной настройки прокси подставляет ключ из PDF на обоих этапах', async () => {
+  const calls = [];
+  const fetchImpl = async (url) => { calls.push(new URL(url)); return new Response('{"goods":[]}'); };
+  for (const query of ['number=01089', 'number=01089&brand=ASAM']) {
+    const response = await request({ fetchImpl }, `/api/price?${query}`);
+    assert.equal(response.status, 200);
+  }
+  assert.ok(calls.every((url) => url.searchParams.get('key') === '00000000-0000-0000-0000-000000000001'));
+  assert.equal(calls[0].searchParams.has('brand'), false);
+  assert.equal(calls[1].searchParams.get('brand'), 'ASAM');
+  assert.equal(calls[1].searchParams.get('analogues'), 'on');
 });
 
 test('ключ остаётся на сервере, параметры и HTTPS-адрес соответствуют спецификации', async () => {

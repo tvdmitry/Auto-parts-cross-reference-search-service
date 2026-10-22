@@ -1,3 +1,5 @@
+import { DOCUMENTATION_API_KEY } from '../src/api/config.js';
+
 const API_URL = 'https://api.favorit-parts.ru/hs/hsprice/';
 
 function sendJson(res, status, data) {
@@ -11,7 +13,7 @@ function sendJson(res, status, data) {
 }
 
 // Один и тот же прокси используется Vite и сервером готовой сборки.
-export function createFavoritProxy({ apiKey = '', fetchImpl = fetch, timeout = 20000 } = {}) {
+export function createFavoritProxy({ apiKey = DOCUMENTATION_API_KEY, fetchImpl = fetch, timeout = 20000 } = {}) {
   return async (req, res, next) => {
     const requestUrl = new URL(req.url, 'http://localhost');
     if (requestUrl.pathname !== '/api/price') return next();

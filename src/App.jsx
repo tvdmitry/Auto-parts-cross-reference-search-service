@@ -4,8 +4,6 @@ import { brandSelected, loadBrands, loadOffers, numberChanged } from './store/se
 import Icon from './components/Icon.jsx';
 import { EmptyState, ErrorState, Loader } from './components/States.jsx';
 import OffersTable from './components/OffersTable.jsx';
-import ApiConnection from './components/ApiConnection.jsx';
-import { setApiKey, usesDirectApi } from './api/parts.js';
 
 export default function App() {
   const dispatch = useDispatch();
@@ -13,21 +11,20 @@ export default function App() {
   const { number, selectedBrand, brands, offers, brandsStatus, offersStatus } = search;
   const [brandsRetry, retryBrands] = useState(0);
   const [offersRetry, retryOffers] = useState(0);
-  const [apiConnected, setApiConnected] = useState(!usesDirectApi);
   const inputRef = useRef(null);
 
   useEffect(() => {
-    if (!apiConnected || !number.trim()) return;
+    if (!number.trim()) return;
     let request;
     const timer = setTimeout(() => { request = dispatch(loadBrands(number.trim())); }, 500);
     return () => { clearTimeout(timer); request?.abort(); };
-  }, [dispatch, number, brandsRetry, apiConnected]);
+  }, [dispatch, number, brandsRetry]);
 
   useEffect(() => {
-    if (!apiConnected || !selectedBrand) return;
+    if (!selectedBrand) return;
     const request = dispatch(loadOffers({ number: number.trim(), brand: selectedBrand }));
     return () => request.abort();
-  }, [dispatch, number, selectedBrand, offersRetry, apiConnected]);
+  }, [dispatch, number, selectedBrand, offersRetry]);
 
   const clearSearch = () => {
     dispatch(numberChanged(''));
@@ -52,15 +49,6 @@ export default function App() {
         <p>Введите артикул и выберите производителя, чтобы найти запчасть и её аналоги.</p>
       </div>
 
-      {usesDirectApi && <ApiConnection connected={apiConnected} onConnect={(key) => {
-        setApiKey(key);
-        setApiConnected(true);
-      }} onDisconnect={() => {
-        setApiKey('');
-        setApiConnected(false);
-        dispatch(numberChanged(''));
-      }} />}
-
       <ol className="search-steps" aria-label="Этапы поиска">
         <li className={selectedBrand ? 'step-complete' : 'step-current'} aria-current={!selectedBrand ? 'step' : undefined}>
           <span className="step-number">{selectedBrand ? <Icon name="check" size={16} /> : '01'}</span>
@@ -78,11 +66,10 @@ export default function App() {
           <div className="input-wrap">
             <Icon name="search" size={21} />
             <input ref={inputRef} id="part-number" className="form-control" value={number} onChange={(event) => dispatch(numberChanged(event.target.value))}
-              disabled={!apiConnected}
               placeholder="Например, 7160500039S" autoComplete="off" spellCheck={false} aria-describedby="search-help" />
             {number && <button type="button" className="clear-button" onClick={clearSearch} aria-label="Очистить артикул"><Icon name="close" size={18} /></button>}
           </div>
-          <p id="search-help" className="form-text">{apiConnected ? 'Поиск начнётся автоматически после ввода артикула.' : 'Сначала укажите ключ покупателя в форме выше.'}</p>
+          <p id="search-help" className="form-text">Поиск начнётся автоматически после ввода артикула.</p>
         </div>
 
         <div className="brands-region" aria-busy={Boolean(waitingForBrands)}>
